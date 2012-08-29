@@ -31,7 +31,7 @@ PDL
 
 =head1 PREAMBLE
 
-    use PDL ();
+    use PDL::LiteF;
 
     use Scalar::Util 'looks_like_number';
 
