@@ -14,13 +14,14 @@ PDL
 =head1 HANDLER
 
     (function(data) {
-        $('.plot').removeClass('hidden');
+        var plot = $(form).children('.plot').first();
+        $(plot).removeClass('hidden');
         if (data.result.constructor == Object && data.result.plot) {
-            $.plot($('.plot'), data.result.plot);
+            $.plot($(plot), data.result.plot);
         }
         else {
-            $('.plot').addClass('hidden');
-            $.plot($('.plot'), []);
+            $(plot).addClass('hidden');
+            $.plot($(plot), []);
         }
     })(data);
 
