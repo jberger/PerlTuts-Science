@@ -1,6 +1,6 @@
 =head1 NAME
 
-PDL
+Tutorial Name
 
 =head1 INCLUDES
 
@@ -14,13 +14,14 @@ PDL
 =head1 HANDLER
 
     (function(data) {
-        $('.plot').removeClass('hidden');
+        var plot = $(form).children('.plot').first();
+        $(plot).removeClass('hidden');
         if (data.result.constructor == Object && data.result.plot) {
-            $.plot($('.plot'), data.result.plot);
+            $.plot($(plot), data.result.plot);
         }
         else {
-            $('.plot').addClass('hidden');
-            $.plot($('.plot'), []);
+            $(plot).addClass('hidden');
+            $.plot($(plot), []);
         }
     })(data);
 
@@ -30,7 +31,7 @@ PDL
 
 =head1 PREAMBLE
 
-    use PDL ();
+    use PDL::LiteF;
 
     use Scalar::Util 'looks_like_number';
 
@@ -126,6 +127,15 @@ Description.
 
 =head1 TUTORIAL
 
-=head2 Simple plot
+=head2 Page Name
 
-    plot([1, 2, 3]);
+Page contents
+
+    # code example
+    say "hi";
+
+=head3 Exercise
+
+    say "hi";
+    __TEST__
+    like($stdout, qr/hi/, "says hi");
