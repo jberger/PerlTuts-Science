@@ -176,3 +176,7 @@ Create a three dimensional PDL using any of the above constructors and print out
     say $pdl->info;
     __TEST__
     like($stdout, qr/\[\d+,\d+,\d+\]/,"Should print out information on a 3D piddle");
+
+=head1 AUTHOR
+
+Joel Berger, C<joel.a.berger@gmail.com>
