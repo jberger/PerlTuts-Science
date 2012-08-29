@@ -153,6 +153,7 @@ When using PDL one creates and manipulates PDL object, whimsically called I<pidd
 
 A PDL object may be created using the C<pdl> command, which converts a Perl array structure to a PDL.
 
+    # no-run
     my $pdl = pdl([[1,2,3],[4,5,6],[7,8,9]]);
 
 To see what the PDL object contains, since PDL overloads stringification, simply print it out. To get other information, the C<info> method is also useful.
