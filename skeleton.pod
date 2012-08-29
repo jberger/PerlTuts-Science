@@ -1,0 +1,131 @@
+=head1 NAME
+
+PDL
+
+=head1 INCLUDES
+
+    /js/jquery.flot.min.js
+
+=head1 JAVASCRIPT
+
+    $('.test').after('<div class="plot hidden" style="margin-top:1em;width:600px;height:300px;"></div>');
+    $.plot($('.plot'), []);
+
+=head1 HANDLER
+
+    (function(data) {
+        $('.plot').removeClass('hidden');
+        if (data.result.constructor == Object && data.result.plot) {
+            $.plot($('.plot'), data.result.plot);
+        }
+        else {
+            $('.plot').addClass('hidden');
+            $.plot($('.plot'), []);
+        }
+    })(data);
+
+=head1 MODULES
+
+    PDL
+
+=head1 PREAMBLE
+
+    use PDL ();
+
+    use Scalar::Util 'looks_like_number';
+
+    sub plot {
+        my @datasets = @_;
+
+        my @output_datasets;
+        for my $dataset (@datasets) {
+
+            # promote to hashref
+            unless (eval { ref $dataset eq 'HASH' }) {
+                $dataset = {data => $dataset};
+            }
+
+            # 1D piddle
+            if (eval { $dataset->{data}->isa('PDL') }) {
+                $dataset->{data} =
+                  [$dataset->{data}->sequence, $dataset->{data}];
+            }
+
+            # promote two piddles
+            if (    eval { $dataset->{data}->[0]->isa('PDL') }
+                and eval { $dataset->{data}->[1]->isa('PDL') })
+            {
+                my ($x, $y) = @{$dataset->{data}};
+                my $data = _unroll($x->cat($y)->xchg(0, 1));
+                $dataset->{data} = $data;
+            }
+
+            # promote a 1D list
+            if (not ref $dataset->{data}->[0]) {
+                my $x = 0;
+                my @pairs;
+                for my $y (@{$dataset->{data}}) {
+                    if (!defined $y) {
+                        $x--;
+                        push @pairs, undef;
+                        next;
+                    }
+
+                    push @pairs, [$x++, $y];
+                }
+                $dataset->{data} = \@pairs;
+            }
+
+            unless (eval { _validate_data($dataset->{data}) }) {
+                print STDERR "Plot Error: $@";
+                return {};
+            }
+
+            push @output_datasets, $dataset;
+        }
+
+        return +{plot => \@output_datasets};
+    }
+
+    sub _unroll {
+        my $pdl = shift;
+        if ($pdl->ndims > 1) {
+            return [map { _unroll($_) } $pdl->dog];
+        }
+        else {
+            return [$pdl->list];
+        }
+    }
+
+    sub _validate_data {
+        my $data = shift;
+
+        die "data must be an arrayref or PDL\n"
+          unless eval { ref $data eq 'ARRAY' };
+        _validate_point($_) for @$data;
+
+        return 1;
+    }
+
+    sub _validate_point {
+        my ($point) = @_;
+        return if !defined $point;
+        die "points must be pairs\n" unless @$point == 2;
+        for my $num (@$point) {
+            die "non numeric point ($num)\n" unless looks_like_number $num;
+        }
+    }
+
+=head1 ABSTRACT
+
+Abstract.
+
+=head1 DESCRIPTION
+
+Description.
+
+=head1 TUTORIAL
+
+=head2 Simple plot
+
+    plot([1, 2, 3]);
