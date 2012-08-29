@@ -149,7 +149,7 @@ The C<plot> command accepts a list of datasets to be plotted. Valid datasets inc
 
 =head2 PDL Object Constructors
 
-When using PDL one creates and manipulates PDL object, whimsically called I<piddles>. These objects represent an array of arbitrary dimensionality and unlike most of Perl, of a certain numerical datatype.
+When using PDL one creates and manipulates PDL objects, whimsically called I<piddles>. These objects represent an array of arbitrary dimensionality and unlike most of Perl, of a certain numerical datatype.
 
 A PDL object may be created using the C<pdl> command, which converts a Perl array structure to a PDL.
 
